@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WappBlaster CRM | Sales Workspace</title>
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<div id="login-screen" class="login-wrap">
+  <div class="login-card">
+    <div class="brand-mark">WB</div>
+    <p class="eyebrow">WAPPBLASTER SALES</p>
+    <h1>Sales CRM</h1>
+    <p class="muted">Manage leads, follow-ups and your sales team.</p>
+    <form id="login-form">
+      <label>Email<input id="login-email" type="email" required autocomplete="username" placeholder="you@company.com"></label>
+      <label>Password<input id="login-password" type="password" required autocomplete="current-password" placeholder="Your password"></label>
+      <button class="btn primary full" type="submit">Log in</button>
+      <p id="login-error" class="error"></p>
+    </form>
+    <details class="register-box"><summary>Create your company workspace</summary><form id="register-form"><label>Company name<input name="company_name" required minlength="2" placeholder="Your company"></label><label>Your name<input name="name" required minlength="2" placeholder="Admin name"></label><label>Work email<input name="email" type="email" required placeholder="you@company.com"></label><label>Password<input name="password" type="password" required minlength="10" placeholder="At least 10 characters"></label><button class="btn outline full" type="submit">Create workspace</button><p id="register-error" class="error"></p></form></details>
+  </div>
+</div>
+<div id="app-screen" class="app hidden">
+  <aside class="sidebar">
+    <div class="brand"><div class="brand-mark small">WB</div><div><b>WappBlaster</b><small>Sales CRM</small></div></div>
+    <nav>
+      <button class="nav-btn active" data-filter="available">◉ <span>Available Leads</span><span id="nav-available" class="nav-count">0</span></button>
+      <button class="nav-btn" data-filter="mine">▣ <span>My Leads</span><span id="nav-mine" class="nav-count">0</span></button>
+      <button class="nav-btn" data-filter="claimed">✓ <span>All Claimed</span><span id="nav-claimed" class="nav-count">0</span></button><button class="nav-btn" data-filter="followups">◷ <span>Follow-ups</span><span id="nav-followups" class="nav-count">0</span></button>
+    </nav>
+    <div class="sidebar-bottom"><div class="user-chip"><div class="avatar" id="user-avatar">U</div><div class="user-meta"><b id="user-name">User</b><small id="user-role">Employee</small></div></div><button id="logout-btn" class="btn ghost full">Log out</button></div>
+  </aside>
+  <main class="main">
+    <header class="topbar"><div><p class="eyebrow">SALES WORKSPACE</p><h1 id="page-title">Available Leads</h1><p class="muted" id="page-subtitle">Claim a lead to make it yours.</p></div><div class="top-actions"><span class="live-dot">● Live dashboard</span><button id="refresh-btn" class="btn outline">↻ Refresh</button></div></header>
+    <section class="stats">
+      <div class="stat-card"><span>Available</span><strong id="stat-available">0</strong><small>Ready to claim</small></div>
+      <div class="stat-card"><span>My Leads</span><strong id="stat-mine">0</strong><small>Claimed by you</small></div>
+      <div class="stat-card"><span>Claimed Total</span><strong id="stat-claimed">0</strong><small>Owned by team</small></div>
+      <div class="stat-card"><span>Total Leads</span><strong id="stat-total">0</strong><small>In this workspace</small></div>
+    </section>
+    <section class="account-settings"><details><summary>Change your password</summary><form id="password-form"><label>Current password<input name="current_password" type="password" required></label><label>New password<input name="new_password" type="password" minlength="10" required></label><button class="btn outline" type="submit">Change password</button><p id="password-msg" class="form-msg"></p></form></details></section>
+    <section id="admin-panel" class="admin-panel hidden">
+      <div class="section-heading"><div><h2>Lead & team management</h2><p class="muted">Admin only · Import, assign and monitor leads.</p></div></div>
+      <form id="lead-form" class="lead-form">
+        <label>Customer / Business name<input name="customer_name" required maxlength="120" placeholder="e.g. Amit Traders"></label>
+        <label>Phone number<input name="phone" maxlength="40" placeholder="+91..."></label>
+        <label>Lead source<select name="source"><option>WhatsApp</option><option>Official API Inquiry</option><option>Website</option><option>Instagram</option><option>Other</option></select></label>
+        <label class="wide">Message / notes<input name="message" maxlength="2000" placeholder="What is the customer asking for?"></label>
+        <button class="btn primary" type="submit">＋ Add lead</button><p id="lead-form-msg" class="form-msg"></p>
+      </form>
+      <div class="admin-tools"><details><summary>Import leads from CSV</summary><p class="muted">CSV header must include Customer Name or Name. Optional columns: Phone, Source, Message.</p><input id="csv-file" type="file" accept=".csv,text/csv"><button id="import-csv-btn" class="btn outline" type="button">Import CSV</button><a href="/sample-leads.csv" id="sample-csv-link" download>CSV template format</a><p id="import-msg" class="form-msg"></p></details><details><summary>Automatic round-robin assignment</summary><p class="muted">When this mode is saved, newly created/imported leads are assigned to the next active employee automatically. You can also manually assign an existing available lead by ID.</p><label>Available lead ID<input id="assign-lead-id" type="number" min="1" placeholder="Enter lead ID"></label><button id="assign-next-btn" class="btn outline" type="button">Assign next employee</button><p id="assign-msg" class="form-msg"></p></details><details><summary>Workspace settings</summary><label>Lead assignment mode<select id="assignment-mode"><option value="manual">Manual claiming</option><option value="round_robin">Round-robin assignment</option></select></label><button id="save-settings-btn" class="btn outline" type="button">Save setting</button><p id="settings-msg" class="form-msg"></p></details><details><summary>Sales reports</summary><button id="load-reports-btn" class="btn outline" type="button">Refresh reports</button><a href="/api/export.csv">Export all leads (CSV)</a><div id="reports-box"></div></details></div>
+      <details class="staff-details"><summary>Manage sales staff</summary>
+        <form id="staff-form" class="staff-form"><input name="name" required placeholder="Employee name"><input name="email" type="email" required placeholder="Employee email"><input name="password" type="password" minlength="10" required placeholder="Temporary password (10+ chars)"><button class="btn outline" type="submit">Add employee</button></form>
+        <div id="staff-list"></div>
+      </details>
+    </section>
+    <section class="leads-section">
+      <div class="section-heading"><div><h2 id="list-heading">Ready for claiming</h2><p class="muted">Claim ownership, status, remarks and follow-up reminders in one place.</p></div><div class="search-box">⌕ <input id="search-input" placeholder="Search name, phone, message..." aria-label="Search leads"></div></div>
+      <div id="notice" class="notice hidden"></div>
+      <div id="leads-list" class="leads-list"></div>
+      <div id="empty-state" class="empty hidden"><div class="empty-icon">✓</div><h3>Nothing to show</h3><p class="muted">Try another tab or search term.</p></div>
+    </section>
+    <footer>WappBlaster CRM · Sales workspace · WhatsApp lead capture and telephony require external provider credentials/integrations.</footer>
+  </main>
+</div>
+<script src="/app.js"></script>
+</body></html>
